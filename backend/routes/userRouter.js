@@ -1,6 +1,6 @@
 const express = require('express')
 import { zod } from 'zod'
-import { User } from '../db'
+import { User, Account } from '../db'
 import jwt from 'jsonwebtoken'
 import { JWT_SECRET } from '../config'
 const router = express.Router()
@@ -21,16 +21,21 @@ router.post('/signup', async (req, res) => {
       message: 'Invalid input'
     })
   }
-  const user = User.findOne({ userName })
-  if (user._id) {
+  const existingUser = User.findOne({ userName })
+  if (existingUser._id) {
     return res.json({
       message: 'Email already taken'
     })
   }
-  const dbUser = await User.create(body)
+  const user = await User.create(body)
+  await Account.create({
+    userId,
+    balance: 1 + Math.random() *10000
+  })
+
   const token = JWT_SECRET.sign(
     {
-      userId: dbUser._id
+      userId: user._id
     },
     JWT_SECRET
   )
@@ -38,6 +43,7 @@ router.post('/signup', async (req, res) => {
     message: 'User created',
     token: token
   })
+
 })
 
 const signinBody = zod.object({

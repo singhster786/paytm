@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import { string } from 'zod'
 mongoose.connect('mongodb://localhost:27017/paytm', {})
 
 const UserSchema = mongoose.Schema({
@@ -29,6 +30,24 @@ const UserSchema = mongoose.Schema({
   }
 })
 
-const User = mongoose.model('User', UserSchema)
 
-export { User }
+const AccountSchema = mongoose.Schema({
+  userID: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+    
+  },
+  balance: {
+    type: string,
+    required: true
+  }
+})
+
+const User = mongoose.model('User', UserSchema)
+const Account = mongoose.model('Account', AccountSchema)
+
+module.exports = {
+  User,
+  Account
+}
