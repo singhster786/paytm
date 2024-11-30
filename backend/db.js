@@ -1,50 +1,49 @@
-import mongoose from 'mongoose'
-import { string } from 'zod'
+const mongoose = require('mongoose')
 mongoose.connect('mongodb://localhost:27017/paytm', {})
 
-const UserSchema = mongoose.Schema({
-  firstName: {
+const userSchema = new mongoose.Schema({
+  username: {
     type: String,
     required: true,
+    // unique: true,
     trim: true,
     lowercase: true,
-    minlength: 3
-  },
-  lastName: {
-    type: String,
-    required: true
-  },
-  userName: {
-    type: String,
-    required: true,
-    maxlength: 20,
-    unique: true,
-    trim: true,
-    lowercase: true,
-    minlength: 3
+    minLength: 3,
+    maxLength: 30,
+    sparse: true
   },
   password: {
     type: String,
     required: true,
-    minlength: 8
+    minLength: 6
+  },
+  firstName: {
+    type: String,
+    required: true,
+    trim: true,
+    maxLength: 50
+  },
+  lastName: {
+    type: String,
+    required: true,
+    trim: true,
+    maxLength: 50
   }
 })
 
-
-const AccountSchema = mongoose.Schema({
-  userID: {
+const AccountSchema = new mongoose.Schema({
+  userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
-    
+    ref: 'User',
+    required: true
   },
   balance: {
-    type: string,
+    type: Number,
     required: true
   }
 })
 
-const User = mongoose.model('User', UserSchema)
+const User = mongoose.model('User', userSchema)
 const Account = mongoose.model('Account', AccountSchema)
 
 module.exports = {
