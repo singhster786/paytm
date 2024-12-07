@@ -1,8 +1,8 @@
-export const InputBox = (label, placeholder) => {
+export const InputBox = ({label, placeholder, onChange}) => {
     return <div>
        <div className="text-sm font-medium test-left py-2">
         {label}
        </div>
-       <input placeholder={placeholder} className="w-full border border-gray-300 rounded-md p-2"></input>
+       <input onChange={onChange} placeholder={placeholder} className="w-full border border-gray-300 rounded-md p-2"></input>
     </div>
 }
