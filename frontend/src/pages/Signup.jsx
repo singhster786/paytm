@@ -42,6 +42,7 @@ export const Signup = () => {
                             password
                         });
                         localStorage.setItem("token", response.data.token)
+                        console.log("navigating");
                         navigate("/dashboard")
                     }} label={"Singup"} />
                 </div>
